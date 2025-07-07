@@ -27,7 +27,7 @@ export class JobAPI {
      *
      * @param {string|number} primaryKey la clé étrangère du job
      * @param {*} [txnId=null]
-     * @return {Job} le job concernée 
+     * @return {Job} le job concerné
      * @memberof JobAPI
      */
     async readById(primaryKey, txnId = null) {

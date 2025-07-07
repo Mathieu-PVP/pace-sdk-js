@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { PaceError } from './PaceError.js';
+import { buildQuery } from '../utils/buildQuery.js';
 
 export class HttpClient {
     constructor({ baseUrl, username, password }) {
@@ -18,8 +19,8 @@ export class HttpClient {
      * @memberof HttpClient
      */
     async request(path, method = 'GET', body = null, query = {}) {
-        const url = new URL(`${this.baseUrl}${path}`);
-        Object.entries(query).forEach(([key, value]) => url.searchParams.append(key, value));
+        const queryString = buildQuery(query);
+        const url = new URL(`${this.baseUrl}${path}${queryString ? '?' + queryString : ''}`);
 
         const options = {
             method,
@@ -28,6 +29,7 @@ export class HttpClient {
                 'Authorization': this.authHeader,
             },
         };
+        
         if (body && ['POST', 'PUT'].includes(method)) {
             options.body = JSON.stringify(body);
         }

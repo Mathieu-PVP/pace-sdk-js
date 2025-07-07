@@ -43,9 +43,31 @@ export class EstimateAPI {
      * @return {Estimate} le devis avec les données mises à jour
      * @memberof EstimateAPI
      */
-    async update(estimateInstance = this) {
+    async update(estimateInstance) {
         const payload = estimateInstance.toJSON();
         const updatedData = await this.client.request('/UpdateObject/updateEstimate', 'POST', payload);
         return new Estimate(updatedData);
     }
+
+    /**
+     * Cloner un devis
+     *
+     * @param {string} keyOfObjectToClone Clé primaire du devis à cloner
+     * @param {string} newParentKey Clé primaire de la société à qui appartiendra le devis
+     * @param {string} [txnId=null]
+     * @param {Estimate} estimateInstance l'instance du devis à cloner avec des modifications (facultatif)
+     * @return {Estimate} Le nouveau devis cloné
+     * @memberof EstimateAPI
+     */
+    async clone(keyOfObjectToClone, newParentKey, txnId = null, estimateInstance) {
+        const query = { keyOfObjectToClone, newParentKey };
+        if (txnId) query.txnId = txnId;
+        if (estimateInstance) {
+            const payload = estimateInstance.toJSON();
+            query.estimateInstance = payload;
+        }
+        const data = await this.client.request('/CloneObject/cloneEstimate', 'POST', {}, query);
+        return new Estimate(data);
+    }
+
 }

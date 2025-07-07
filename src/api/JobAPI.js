@@ -44,7 +44,7 @@ export class JobAPI {
      * @return {Job} le job avec les données mises à jour
      * @memberof JobAPI
      */
-    async update(jobInstance = this) {
+    async update(jobInstance) {
         const payload = jobInstance.toJSON();
         const updatedData = await this.client.request('/UpdateObject/updateJob', 'POST', payload);
         return new Job(updatedData);

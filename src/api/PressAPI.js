@@ -43,7 +43,7 @@ export class PressAPI {
      * @return {Press} la presse avec les données mises à jour
      * @memberof PressAPI
      */
-    async update(pressInstance = this) {
+    async update(pressInstance) {
         const payload = pressInstance.toJSON();
         const updatedData = await this.client.request('/UpdateObject/updatePress', 'POST', payload);
         return new Press(updatedData);

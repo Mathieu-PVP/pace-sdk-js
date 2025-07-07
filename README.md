@@ -17,6 +17,7 @@ console.log(`PaceSDK - v${version}`);
 (async function () {
     const jobs = await Client.jobs.findAll({ xpath: 'null-to-zero(@job) > 0' });
     const presses = await Client.presses.findAll({ xpath: 'null-to-zero(@id) > 0' });
-    console.log(jobs, presses);
+    const estimates = await Client.estimates.findAll({ xpath: 'null-to-zero(@id) > 0' });
+    console.log(jobs, presses, estimates);
 }());
 ```

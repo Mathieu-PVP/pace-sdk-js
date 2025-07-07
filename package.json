@@ -1,0 +1,21 @@
+{
+  "name": "pace-sdk",
+  "version": "1.0.0",
+  "description": "Le kit de développement logiciel pour Pace",
+  "keywords": [
+    "pace",
+    "erp",
+    "api",
+    "sdk"
+  ],
+  "license": "MIT",
+  "author": "MathieuGDC",
+  "type": "module",
+  "main": "./src/PaceClient.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

@@ -54,7 +54,7 @@ export class JobAPI {
      * Cloner un job
      *
      * @param {string} keyOfObjectToClone Clé primaire du job à cloner
-     * @param {string} newParentKey Clé primaire de la société à qui appartiendra le job
+     * @param {string} newParentKey Clé primaire du client à qui appartiendra le job
      * @param {string} [txnId=null]
      * @param {Job} jobInstance l'instance du job à cloner avec des modifications (facultatif)
      * @return {Job} Le nouveau job cloné

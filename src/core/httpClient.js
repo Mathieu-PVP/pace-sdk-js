@@ -36,6 +36,11 @@ export class HttpClient {
 
         try {
             const response = await fetch(url, options);
+
+            if (response.status === 204) {
+                return undefined;
+            }
+
             const responseData = await response.json();
 
             if (!response.ok) {

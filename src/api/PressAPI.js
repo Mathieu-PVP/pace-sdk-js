@@ -48,4 +48,39 @@ export class PressAPI {
         const updatedData = await this.client.request('/UpdateObject/updatePress', 'POST', payload);
         return new Press(updatedData);
     }
+
+    /**
+     * Cloner une presse
+     *
+     * @param {string} keyOfObjectToClone Clé primaire de la presse à cloner
+     * @param {string} newParentKey Clé primaire de la société à qui appartiendra la presse
+     * @param {string} [txnId=null]
+     * @param {Press} pressInstance l'instance de la presse à cloner avec des modifications (facultatif)
+     * @return {Press} La nouvelle presse clonée
+     * @memberof PressAPI
+     */
+    async clone(keyOfObjectToClone, newParentKey, txnId = null, pressInstance) {
+        const query = { keyOfObjectToClone, newParentKey };
+        if (txnId) query.txnId = txnId;
+        if (pressInstance) {
+            const payload = pressInstance.toJSON();
+            query.pressInstance = payload;
+        }
+        const data = await this.client.request('/CloneObject/clonePress', 'POST', {}, query);
+        return new Press(data);
+    }
+
+    /**
+     * Supprimer une presse
+     *
+     * @param {string} key Clé primaire de la presse
+     * @param {string} [txnId=null]
+     * @return {void}
+     * @memberof PressAPI
+     */
+    async delete(key, txnId = null) {
+        const query = { type: 'Press', key };
+        if (txnId) query.txnId = txnId;
+        await this.client.request('/DeleteObject/DeleteObject', 'DELETE', {}, query);
+    }
 }

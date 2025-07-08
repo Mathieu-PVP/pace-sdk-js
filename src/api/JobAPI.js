@@ -49,4 +49,39 @@ export class JobAPI {
         const updatedData = await this.client.request('/UpdateObject/updateJob', 'POST', payload);
         return new Job(updatedData);
     }
+
+    /**
+     * Cloner un job
+     *
+     * @param {string} keyOfObjectToClone Clé primaire du job à cloner
+     * @param {string} newParentKey Clé primaire de la société à qui appartiendra le job
+     * @param {string} [txnId=null]
+     * @param {Job} jobInstance l'instance du job à cloner avec des modifications (facultatif)
+     * @return {Job} Le nouveau job cloné
+     * @memberof JobAPI
+     */
+    async clone(keyOfObjectToClone, newParentKey, txnId = null, jobInstance) {
+        const query = { keyOfObjectToClone, newParentKey };
+        if (txnId) query.txnId = txnId;
+        if (jobInstance) {
+            const payload = jobInstance.toJSON();
+            query.jobInstance = payload;
+        }
+        const data = await this.client.request('/CloneObject/cloneJob', 'POST', {}, query);
+        return new Job(data);
+    }
+
+    /**
+     * Supprimer un job
+     *
+     * @param {string} key Clé primaire du job
+     * @param {string} [txnId=null]
+     * @return {void}
+     * @memberof JobAPI
+     */
+    async delete(key, txnId = null) {
+        const query = { type: 'Job', key };
+        if (txnId) query.txnId = txnId;
+        await this.client.request('/DeleteObject/DeleteObject', 'DELETE', {}, query);
+    }
 }

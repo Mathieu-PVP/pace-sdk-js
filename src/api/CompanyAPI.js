@@ -49,4 +49,39 @@ export class CompanyAPI {
         const updatedData = await this.client.request('/UpdateObject/updateCompany', 'POST', payload);
         return new Company(updatedData);
     }
+
+    /**
+     * Cloner une société
+     *
+     * @param {string} keyOfObjectToClone Clé primaire de la société à cloner
+     * @param {string} newParentKey Clé primaire de la société à qui appartiendra la société
+     * @param {string} [txnId=null]
+     * @param {Company} companyInstance l'instance de la société à cloner avec des modifications (facultatif)
+     * @return {Company} La nouvelle société clonée
+     * @memberof CompanyAPI
+     */
+    async clone(keyOfObjectToClone, newParentKey, txnId = null, companyInstance) {
+        const query = { keyOfObjectToClone, newParentKey };
+        if (txnId) query.txnId = txnId;
+        if (companyInstance) {
+            const payload = companyInstance.toJSON();
+            query.companyInstance = payload;
+        }
+        const data = await this.client.request('/CloneObject/cloneCompany', 'POST', {}, query);
+        return new Company(data);
+    }
+
+    /**
+     * Supprimer une société
+     *
+     * @param {string} key Clé primaire de la société
+     * @param {string} [txnId=null]
+     * @return {void}
+     * @memberof CompanyAPI
+     */
+    async delete(key, txnId = null) {
+        const query = { type: 'Company', key };
+        if (txnId) query.txnId = txnId;
+        await this.client.request('/DeleteObject/DeleteObject', 'DELETE', {}, query);
+    }
 }

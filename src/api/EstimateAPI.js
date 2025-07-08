@@ -70,4 +70,17 @@ export class EstimateAPI {
         return new Estimate(data);
     }
 
+    /**
+     * Supprimer un devis
+     *
+     * @param {string} key Clé primaire du devis
+     * @param {string} [txnId=null]
+     * @return {void}
+     * @memberof EstimateAPI
+     */
+    async delete(key, txnId = null) {
+        const query = { type: 'Estimate', key };
+        if (txnId) query.txnId = txnId;
+        await this.client.request('/DeleteObject/DeleteObject', 'DELETE', {}, query);
+    }
 }

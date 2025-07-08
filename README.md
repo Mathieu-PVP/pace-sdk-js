@@ -1,5 +1,7 @@
-# pace-sdk-js
+# Pace SDK Javascript
 Le kit de développement logiciel pour Pace
+
+- [Documentation](https://pace-sdk-js.vercel.app/)
 
 # Utilisation
 

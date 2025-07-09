@@ -1,4 +1,15 @@
+/**
+ * Classe générique pour gérer les requêtes CRUD
+ */
 export class AbstractAPI {
+    /**
+     * Crée une nouvelle instance d'AbstractAPI
+     * 
+     * @param {object} httpclient - Client HTTP pour faire les requêtes
+     * @param {string} type - Nom du type d'objet (ex: "Company", "Customer", etc.)
+     * @param {class} Model - Classe du modèle à instancier
+     * @param {object} [endpoints={}] - Endpoints personnalisés
+     */
     constructor(httpclient, type, Model, endpoints) {
         this.httpclient = httpclient;
         this.type = type;
@@ -15,10 +26,12 @@ export class AbstractAPI {
     }
 
     /**
-     * Récupérer tous les objets
+     * Récupère tous les objets correspondant à un XPath donné
      *
-     * @param {object} { xpath }
-     * @return {Model[]} 
+     * @param {object} params
+     * @param {string} params.xpath - Requête XPath pour filtrer les objets
+     * @param {string|null} [params.txnId=null] - Identifiant de transaction (optionnel)
+     * @returns {Promise<Model[]>} Liste des objets correspondants
      * @memberof AbstractAPI
      */
     async findAll({ xpath, txnId = null }) {
@@ -29,10 +42,15 @@ export class AbstractAPI {
     }
 
     /**
-     * Récupérer X à Y objets à partir d'une requête personnalisée
+     * Récupère une portion paginée d'objets triés, via une requête XPath
      *
-     * @param {object} { xpath, offset, limit, txnId = null, xpathSorts = [] }
-     * @return {Abstract[]} 
+     * @param {object} params
+     * @param {string} params.xpath - Requête XPath de filtrage
+     * @param {number} params.offset - Index de départ
+     * @param {number} params.limit - Nombre maximum d'objets à retourner
+     * @param {string|null} [params.txnId=null] - Identifiant de transaction (optionnel)
+     * @param {object[]} [params.xpathSorts=[]] - Tableau de critères de tri (XPathSort)
+     * @returns {Promise<Model[]>} Liste des objets correspondants
      * @memberof AbstractAPI
      */
     async findSortAndLimit({ xpath, offset, limit, txnId = null, xpathSorts = [] }) {
@@ -43,11 +61,11 @@ export class AbstractAPI {
     }
 
     /**
-     * Récupérer un objet à partir de son ID
+     * Récupère un objet à partir de sa clé primaire
      *
-     * @param {string|number} primaryKey la clé étrangère de l'objet
-     * @param {*} [txnId=null]
-     * @return {Abstract} l'objet concerné
+     * @param {string} primaryKey - Clé primaire de l'objet
+     * @param {string|null} [txnId=null] - Identifiant de transaction (optionnel)
+     * @returns {Promise<Model>} Instance de l'objet récupéré
      * @memberof AbstractAPI
      */
     async readById(primaryKey, txnId = null) {
@@ -58,10 +76,10 @@ export class AbstractAPI {
     }
 
     /**
-     * Mettre à jour un objet
+     * Met à jour un objet existant
      *
-     * @param {Abstract} jobInstance l'instance de l'objet
-     * @return {Abstract} l'objet avec les données mises à jour
+     * @param {Model} instance - Instance de l'objet avec les données mises à jour
+     * @returns {Promise<Model>} Objet mis à jour
      * @memberof AbstractAPI
      */
     async update(instance) {
@@ -71,16 +89,17 @@ export class AbstractAPI {
     }
 
     /**
-     * Cloner un objet
+     * Clone un objet existant, éventuellement avec des modifications
      *
-     * @param {string} keyOfObjectToClone Clé primaire de l'objet à cloner
-     * @param {string} newParentKey Clé primaire de l'objet parente à qui appartiendra cette objet
-     * @param {string} [txnId=null]
-     * @param {Abstract} instance l'instance de l'objet à cloner avec des modifications (facultatif)
-     * @return {Abstract} La nouvelle objet cloné
+     * @param {object} params
+     * @param {string} params.keyOfObjectToClone - Clé de l'objet à cloner
+     * @param {string} params.newParentKey - Clé du parent de l'objet cloné
+     * @param {string|null} [params.txnId=null] - Identifiant de transaction (optionnel)
+     * @param {Model|null} [params.instance=null] - Nouvelle instance à cloner avec modifications (optionnel)
+     * @returns {Promise<Model>} Nouvel objet cloné
      * @memberof AbstractAPI
      */
-    async clone(keyOfObjectToClone, newParentKey, txnId = null, instance = null) {
+    async clone({ keyOfObjectToClone, newParentKey, txnId = null, instance = null }) {
         const query = { keyOfObjectToClone, newParentKey };
         if (txnId) query.txnId = txnId;
         if (instance) query[`${this.type.toLowerCase()}Instance`] = instance.toJSON();
@@ -89,11 +108,11 @@ export class AbstractAPI {
     }
 
     /**
-     * Supprimer un objet
+     * Supprime un objet à partir de sa clé primaire
      *
-     * @param {string} key Clé primaire de l'objet
-     * @param {string} [txnId=null]
-     * @return {void}
+     * @param {string} key - Clé primaire de l'objet à supprimer
+     * @param {string|null} [txnId=null] - Identifiant de transaction (optionnel)
+     * @returns {Promise<void>}
      * @memberof AbstractAPI
      */
     async delete(key, txnId = null) {

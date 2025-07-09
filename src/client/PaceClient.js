@@ -5,6 +5,7 @@ import { EstimateAPI } from '../api/EstimateAPI.js';
 import { JobAPI } from '../api/JobAPI.js';
 import { JobPlanAPI } from '../api/JobPlanAPI.js';
 import { PressAPI } from '../api/PressAPI.js';
+import { VendorAPI } from '../api/VendorAPI.js';
 
 export class PaceClient {
     constructor({ username, password, baseUrl }) {
@@ -15,5 +16,6 @@ export class PaceClient {
         this.jobs = new JobAPI(client);
         this.jobplans = new JobPlanAPI(client);
         this.presses = new PressAPI(client);
+        this.vendors = new VendorAPI(client);
     }
 } 

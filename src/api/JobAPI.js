@@ -21,6 +21,20 @@ export class JobAPI {
         return Promise.all(jobPromises);
     }
 
+    /**
+     * Récupérer X à Y jobs à partir d'une requête personnalisée
+     *
+     * @param {object} { xpath, offset, limit, txnId = null, xpathSorts = [] }
+     * @return {Job[]} 
+     * @memberof JobAPI
+     */
+    async findSortAndLimit({ xpath, offset, limit, txnId = null, xpathSorts = [] }) {
+        const query = { type: 'Job', xpath, offset, limit };
+        if (txnId) query.txnId = txnId;
+        const data = await this.client.request('/FindObjects/findSortAndLimit', 'POST', xpathSorts, query);
+        const jobPromises = data.map((jobId) => this.readById(jobId));
+        return Promise.all(jobPromises);
+    }
 
     /**
      * Récupérer un job à partir de son ID

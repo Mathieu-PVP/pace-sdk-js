@@ -22,6 +22,21 @@ export class EstimateAPI {
     }
 
     /**
+     * Récupérer X à Y devis à partir d'une requête personnalisée
+     *
+     * @param {object} { xpath, offset, limit, txnId = null, xpathSorts = [] }
+     * @return {Estimate[]} 
+     * @memberof EstimateAPI
+     */
+    async findSortAndLimit({ xpath, offset, limit, txnId = null, xpathSorts = [] }) {
+        const query = { type: 'Estimate', xpath, offset, limit };
+        if (txnId) query.txnId = txnId;
+        const data = await this.client.request('/FindObjects/findSortAndLimit', 'POST', xpathSorts, query);
+        const estimatePromises = data.map((estimateId) => this.readById(estimateId));
+        return Promise.all(estimatePromises);
+    }
+
+    /**
      * Récupérer un devis à partir de son ID
      *
      * @param {string|number} primaryKey la clé étrangère du devis

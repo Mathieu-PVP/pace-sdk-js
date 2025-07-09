@@ -22,6 +22,21 @@ export class PressAPI {
     }
 
     /**
+     * Récupérer X à Y presses à partir d'une requête personnalisée
+     *
+     * @param {object} { xpath, offset, limit, txnId = null, xpathSorts = [] }
+     * @return {Press[]} 
+     * @memberof PressAPI
+     */
+    async findSortAndLimit({ xpath, offset, limit, txnId = null, xpathSorts = [] }) {
+        const query = { type: 'Press', xpath, offset, limit };
+        if (txnId) query.txnId = txnId;
+        const data = await this.client.request('/FindObjects/findSortAndLimit', 'POST', xpathSorts, query);
+        const pressPromises = data.map((pressId) => this.readById(pressId));
+        return Promise.all(pressPromises);
+    }
+
+    /**
      * Récupérer une presse à partir de son ID
      *
      * @param {string|number} primaryKey la clé étrangère de la presse

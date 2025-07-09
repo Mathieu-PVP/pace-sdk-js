@@ -21,6 +21,20 @@ export class CompanyAPI {
         return Promise.all(companyPromises);
     }
 
+    /**
+     * Récupérer X à Y sociétés à partir d'une requête personnalisée
+     *
+     * @param {object} { xpath, offset, limit, txnId = null, xpathSorts = [] }
+     * @return {Company[]} 
+     * @memberof CompanyAPI
+     */
+    async findSortAndLimit({ xpath, offset, limit, txnId = null, xpathSorts = [] }) {
+        const query = { type: 'Company', xpath, offset, limit };
+        if (txnId) query.txnId = txnId;
+        const data = await this.client.request('/FindObjects/findSortAndLimit', 'POST', xpathSorts, query);
+        const companyPromises = data.map((companyId) => this.readById(companyId));
+        return Promise.all(companyPromises);
+    }
 
     /**
      * Récupérer une société à partir de son ID

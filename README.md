@@ -1,10 +1,14 @@
 # Pace SDK Javascript
 Le kit de développement logiciel pour Pace
 
-# Utilisation
+## Installation
+```
+npm i Mathieu-PVP/pace-sdk-js
+```
 
+## Utilisation
 ```js
-import { PaceClient, version } from './src/index.js';
+import { PaceClient, version } from 'pace-sdk-js';
 
 const Client = new PaceClient({
     username: '<username>',
@@ -19,3 +23,6 @@ console.log(`PaceSDK - v${version}`);
     console.log(estimates);
 }());
 ```
+
+## Crédits
+Mathieu GALLAIS de CHATEAUCROC

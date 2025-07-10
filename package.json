@@ -1,6 +1,6 @@
 {
-  "name": "pace-sdk",
-  "version": "1.0.0",
+  "name": "pace-sdk-js",
+  "version": "0.0.1",
   "description": "Le kit de développement logiciel pour Pace",
   "keywords": [
     "pace",

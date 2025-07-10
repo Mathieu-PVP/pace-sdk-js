@@ -1,8 +1,6 @@
 # Pace SDK Javascript
 Le kit de développement logiciel pour Pace
 
-- [Documentation](https://pace-sdk-js.vercel.app/)
-
 # Utilisation
 
 ```js
@@ -17,9 +15,7 @@ const Client = new PaceClient({
 console.log(`PaceSDK - v${version}`);
 
 (async function () {
-    const jobs = await Client.jobs.findAll({ xpath: 'null-to-zero(@job) > 0' });
-    const presses = await Client.presses.findAll({ xpath: 'null-to-zero(@id) > 0' });
-    const estimates = await Client.estimates.findAll({ xpath: 'null-to-zero(@id) > 0' });
-    console.log(jobs, presses, estimates);
+    const estimates = await Client.estimate.findAll({ xpath: 'null-to-zero(@id) > 0' });
+    console.log(estimates);
 }());
 ```

@@ -30,10 +30,11 @@ export class AbstractAPI {
      * Créé un objet existant
      *
      * @param {Model} instance - Instance de l'objet avec les données à créer
+     * @param {string|null} [txnId=null] - Identifiant de transaction (optionnel)
      * @returns {Promise<Model>} Objet créé
      * @memberof AbstractAPI
      */
-    async create(instance, txnId) {
+    async create(instance, txnId = null) {
         const query = {};
         if (txnId) query.txnId = txnId;
         const payload = instance.toJSON();
@@ -95,10 +96,11 @@ export class AbstractAPI {
      * Met à jour un objet existant
      *
      * @param {Model} instance - Instance de l'objet avec les données mises à jour
+     * @param {string|null} [txnId=null] - Identifiant de transaction (optionnel)
      * @returns {Promise<Model>} Objet mis à jour
      * @memberof AbstractAPI
      */
-    async update(instance, txnId) {
+    async update(instance, txnId = null) {
         const query = {};
         if (txnId) query.txnId = txnId;
         const payload = instance.toJSON();

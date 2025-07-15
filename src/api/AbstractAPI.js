@@ -17,12 +17,28 @@ export class AbstractAPI {
         this.endpoints = {
             find: '/FindObjects/find',
             findSortAndLimit: '/FindObjects/findSortAndLimit',
+            create: `/CreateObject/create${type}`,
             read: `/ReadObject/read${type}`,
             update: `/UpdateObject/update${type}`,
             clone: `/CloneObject/clone${type}`,
             delete: '/DeleteObject/DeleteObject',
             ...endpoints
         };
+    }
+
+    /**
+     * Créé un objet existant
+     *
+     * @param {Model} instance - Instance de l'objet avec les données à créer
+     * @returns {Promise<Model>} Objet créé
+     * @memberof AbstractAPI
+     */
+    async create(instance, txnId) {
+        const query = {};
+        if (txnId) query.txnId = txnId;
+        const payload = instance.toJSON();
+        const data = await this.httpclient.request(this.endpoints.create, 'POST', payload, query);
+        return new this.Model(data);
     }
 
     /**
@@ -82,9 +98,11 @@ export class AbstractAPI {
      * @returns {Promise<Model>} Objet mis à jour
      * @memberof AbstractAPI
      */
-    async update(instance) {
+    async update(instance, txnId) {
+        const query = {};
+        if (txnId) query.txnId = txnId;
         const payload = instance.toJSON();
-        const data = await this.httpclient.request(this.endpoints.update, 'POST', payload);
+        const data = await this.httpclient.request(this.endpoints.update, 'POST', payload, query);
         return new this.Model(data);
     }
 

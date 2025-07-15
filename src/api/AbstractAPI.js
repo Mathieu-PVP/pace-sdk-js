@@ -120,8 +120,8 @@ export class AbstractAPI {
     async clone({ keyOfObjectToClone, newParentKey, txnId = null, instance = null }) {
         const query = { keyOfObjectToClone, newParentKey };
         if (txnId) query.txnId = txnId;
-        if (instance) query[`${this.type.toLowerCase()}Instance`] = instance.toJSON();
-        const data = await this.httpclient.request(this.endpoints.clone, 'POST', {}, query);
+        const payload = instance ? instance.toJSON() : {};
+        const data = await this.httpclient.request(this.endpoints.clone, 'POST', payload, query);
         return new this.Model(data);
     }
 
